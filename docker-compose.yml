@@ -1,0 +1,11 @@
+services:
+  rdb:
+    container_name: bdd relationnelle
+    image: postgres
+    volumes:
+      - pgdata:/var/lib/postgressql/data
+      
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
