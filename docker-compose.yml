@@ -1,22 +1,31 @@
 services:
   rdb:
-    container_name: bdd relationnelle
+    container_name: bdd_relationnelle
     image: postgres
     volumes:
       - pgdata:/var/lib/postgressql/data
       
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: postgrespassword
-      
+
   nrdb:
-    container_name: bdd non relationnelle
+    container_name: bdd_non_relationnelle
     image: redis
     volumes:
       - 
       
-    ports:
-      - 
+    ports: 
+      - "6379:6379"
     environment:
-      
+      REDIS_PASSWORD: redispassword
+  
+  node_container:
+
+  python_container:
+
+  dotnet_container: 
+    
+volumes:
+  pgdata:
