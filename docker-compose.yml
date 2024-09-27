@@ -3,18 +3,19 @@ services:
     container_name: bdd_relationnelle
     image: postgres
     volumes:
-      - pgdata:/var/lib/postgressql/data
+      - postgres_data:/var/lib/postgresql/data
       
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DATABASE: postgresdb
 
   nrdb:
     container_name: bdd_non_relationnelle
     image: redis
-    volumes:
-      - 
+    volumes: 
+      - redis_data:/data
       
     ports: 
       - "6379:6379"
@@ -22,10 +23,36 @@ services:
       REDIS_PASSWORD: redispassword
   
   node_container:
-
+    depends_on:
+      - rdb
+    container_name: node
+    build: ./result
+    environment:
+      NODE_DATASOURCE_URL: jdbc:postgressql://rdb:5432/postgresdb
+      NODE_DATASOURCE_USERNAME: postgres
+      NODE_DATASOURCE_PASSWORD: nodepassword
+    ports:
+      - "3000:80"
+  
   python_container:
+    depends_on:
+      - nrdb
+    container_name: python
+    build: ./vote
+    environment:
+      - 
+    ports:
+      - "8000:80"
 
-  dotnet_container: 
-    
+  dotnet_container:
+    depends_on:
+      - rdb
+      - nrdb
+    container_name: dotnet
+    build: ./worker
+    environment:
+      - 
+
 volumes:
-  pgdata:
+  postgres_data:
+  redis_data:
